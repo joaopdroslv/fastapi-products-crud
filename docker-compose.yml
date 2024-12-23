@@ -1,0 +1,27 @@
+services:
+  fastapi:
+    build: .
+    container_name: fastapi-products-app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URL=${MONGODB_URL}
+    volumes:
+      - .:/src
+      - ./db:/db
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
