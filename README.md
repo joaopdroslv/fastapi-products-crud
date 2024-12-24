@@ -2,6 +2,22 @@
 
 Este `FastAPI Products CRUD` é um projeto FastAPI responsável por gerenciar as operações CRUD relacionadas a produtos. Ele integra com um banco de dados SQL (usando SQLAlchemy) para o gerenciamento de produtos e um cliente MongoDB para registrar as visualizações dos produtos.
 
+### Observações
+
+O projeto foi desenvolvido levando em consideração as boas práticas definidas na documentação do FastAPI web framework. Disponível em:
+
+[FastAPI Documentation](https://fastapi.tiangolo.com)
+
+E também as boas práticas disponíveis no repositório `fastapi-best-practices`. Disponível em:
+
+[fastapi-best-practices GitHub Repository](https://github.com/zhanymkanov/fastapi-best-practices)
+
+# Documentação POSTMAN
+
+Uma collection POSTMAN foi criada para documentar os endpoints do projeto. Disponível em:
+
+[POSTMAN Documentation](https://documenter.getpostman.com/view/40636918/2sAYJ4igQE)
+
 ## Como Rodar o Projeto
 
 ### Passo 1: Clone o repositório
