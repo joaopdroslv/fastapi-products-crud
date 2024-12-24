@@ -7,7 +7,7 @@ services:
     depends_on:
       - mongodb
     environment:
-      - MONGO_URL=${MONGODB_URL}
+      - MONGO_URL=${MONGODB_PRODUCTION_URL}
     volumes:
       - .:/src
       - ./db:/db # Volume para o SQLite

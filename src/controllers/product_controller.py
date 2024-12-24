@@ -1,7 +1,7 @@
 from src.schemas import product_schema
 from src.crud import product_crud
 from src.database import dependencies
-from src.database import mongo_db
+from src.database import mongodb
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
@@ -10,7 +10,8 @@ from sqlalchemy.orm import Session
 class ProductController:
     def __init__(self):
         self.router = APIRouter(prefix='/products')
-        self.product_log_client = mongo_db.ProductLogClient()  # MongoClient para gerar log de visualização
+        # MongoClient para gerar log de visualização
+        self.product_log_client = mongodb.ProductLogClient()  
 
         self.router.add_api_route(
             '/', self.create_product, methods=['POST'], response_model=product_schema.Product, status_code=201
@@ -45,6 +46,7 @@ class ProductController:
 
     def delete_product(self, product_id: int, db: Session = Depends(dependencies.get_db)):
         product_crud.find_product_by_id(product_id, db)  # Validar se o produto existe na database
+        self.product_log_client.clear_product_logs(product_id)  # Limpa os logs do produto excluído
         deleted_product = product_crud.delete_product(db=db, product_id=product_id)
         return deleted_product
 

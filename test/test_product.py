@@ -1,16 +1,18 @@
 from src.main import app
+from src.schemas.product_schema import ProductStatus
+from src.controllers.product_controller import product_controller
 from src.database import dependencies
 from src.database import sqlite
-from src.schemas.product_schema import ProductStatus
-
+from src.database import mongodb
 from test import utils
 
 import pytest
-from unittest.mock import MagicMock
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from fastapi.testclient import TestClient
 from typing import List
+from dotenv import load_dotenv
+import os
 
 
 SQLALCHEMY_DATABASE_URL = 'sqlite:///./test/test_database.db'
@@ -31,33 +33,32 @@ app.dependency_overrides[dependencies.get_db] = override_get_db
 
 client = TestClient(app)
 
+load_dotenv()
 
-@pytest.fixture(scope='function')
-def mock_product_log_client():
-    """Mocka a interação com o MongoDB para testes."""
-    mock_client = MagicMock()
-    mock_client.log_product_view = MagicMock()  # Mocka a função de log
-    mock_client.get_product_view_logs = MagicMock(return_value=[
-        {"viewed_at": "2024-12-20T00:00:00Z"},
-        {"viewed_at": "2024-12-20T01:00:00Z"},
-        {"viewed_at": "2024-12-20T01:00:00Z"},
-        {"viewed_at": "2024-12-20T01:00:00Z"},
-    ])  # Mocka a função de busca dos logs com 4 logs falsos
-    return mock_client
+MONGODB_TEST_DATABASE_NAME=os.getenv('MONGODB_TEST_DATABASE_NAME')
 
 
 @pytest.fixture(scope='function')
-def setup_database(mock_product_log_client):
+def setup_database():
     # Substitui o ProductLogClient usado pelo controlador de produtos
-    from src.controllers.product_controller import product_controller
-    product_controller.product_log_client = mock_product_log_client
+    product_controller.product_log_client = mongodb.ProductLogClient('test')
+
+    # Limpeza do banco de dados do MongoDB antes de cada teste
+    # Captura o mongo client do product log client
+    mongo_client = product_controller.product_log_client.mongo_client  
+    mongo_client.drop_database(MONGODB_TEST_DATABASE_NAME)
 
     # Criação e limpeza das tabelas antes de cada teste
     sqlite.Base.metadata.drop_all(bind=engine)
     sqlite.Base.metadata.create_all(bind=engine)
+
     yield
+
     # Limpeza após o teste
     sqlite.Base.metadata.drop_all(bind=engine)
+
+    # Limpeza do banco de dados do MongoDB depois de cada teste
+    mongo_client.drop_database(MONGODB_TEST_DATABASE_NAME)
 
 
 def test_create_product(setup_database):
@@ -131,11 +132,12 @@ def test_list_products_with_content_validation(setup_database):
     assert response.status_code == 200
     assert len(response.json()) == len(generated_products)
     for i, generated_product in enumerate(generated_products):
-        assert response.json()[i]['name'] == generated_product['name']
-        assert response.json()[i]['description'] == generated_product['description']
-        assert response.json()[i]['price'] == generated_product['price']
-        assert response.json()[i]['status'] == generated_product['status']
-        assert response.json()[i]['stock_quantity'] == generated_product['stock_quantity']
+        resonse_data = response.json()[i]
+        assert resonse_data['name'] == generated_product['name']
+        assert resonse_data['description'] == generated_product['description']
+        assert resonse_data['price'] == generated_product['price']
+        assert resonse_data['status'] == generated_product['status']
+        assert resonse_data['stock_quantity'] == generated_product['stock_quantity']
 
 
 def test_list_product(setup_database):
@@ -149,8 +151,8 @@ def test_list_product(setup_database):
     assert response.json() == created_product
 
 
-def test_product_log_is_being_called(setup_database, mock_product_log_client):
-    """Ensuring the product log function is beeing called."""
+def test_get_product_view_log(setup_database):
+    """Ensuring the product view log is being created."""
     # Cria um produto
     generated_products: List[dict] = utils.generate_valid_products(1)
     response = client.post('/products', json=generated_products[0])
@@ -159,30 +161,78 @@ def test_product_log_is_being_called(setup_database, mock_product_log_client):
     # Visualiza o produto criado
     response = client.get(f'/products/{created_product_id}')
 
-    # Verifica se a função de log foi chamada
-    mock_product_log_client.log_product_view.assert_called_once_with(created_product_id)
+    # Busca os logs do produto criado e visualizado
+    response = client.get(f'/products/{created_product_id}/views')
 
+    response_data = response.json()
     assert response.status_code == 200
+    assert 'number_of_views' in response_data
+    assert 'views' in response_data
+    assert response_data['number_of_views'] == 1  # Produto foi pesquisado apenas uma vez
+    assert len(response_data['views']) == 1  # Produto foi pesquisado apenas uma vez
 
 
-def test_get_product_logs(setup_database, mock_product_log_client):
-    """Ensuring the product view logs are being return in the correct format."""
+def test_get_multiple_product_view_logs(setup_database):
+    """Ensuring the product view logs are being created."""
     # Cria um produto
     generated_products: List[dict] = utils.generate_valid_products(1)
     response = client.post('/products', json=generated_products[0])
     created_product_id = response.json()['id']
 
-    # Busca os logs do produto criado, considerando que já foi buscado algumas vezes
-    response = client.get(f'/products/{created_product_id}/views')
+    # Visualiza o produto criado
+    for i in range(30):
+        response = client.get(f'/products/{created_product_id}')
 
-    # Verifica se a função de log foi chamada
-    mock_product_log_client.get_product_view_logs.assert_called_once_with(created_product_id)
+    # Busca os logs do produto criado e visualizado
+    response = client.get(f'/products/{created_product_id}/views')
 
     response_data = response.json()
     assert response.status_code == 200
-    assert 'views' in response_data  # Listagem das visualizações
-    assert 'number_of_views' in response_data  # Quantidade de visualizações
-    assert response_data['number_of_views'] == 4  # Quantidade de logs mockados
+    assert 'number_of_views' in response_data
+    assert 'views' in response_data
+    assert response_data['number_of_views'] == 30
+    assert len(response_data['views']) == 30
+
+
+def test_product_view_log_format(setup_database):
+    """Ensuring the product view log is being created correctly."""
+    # Cria um produto
+    generated_products: List[dict] = utils.generate_valid_products(1)
+    response = client.post('/products', json=generated_products[0])
+    created_product_id = response.json()['id']
+
+    # Visualiza o produto criado
+    response = client.get(f'/products/{created_product_id}')
+
+    # Busca os logs do produto criado e visualizado
+    response = client.get(f'/products/{created_product_id}/views')
+
+    response_data = response.json()
+    assert response.status_code == 200
+    assert 'number_of_views' in response_data
+    assert 'views' in response_data
+    assert response_data['number_of_views'] == 1  # Produto foi pesquisado apenas uma vez
+    assert len(response_data['views']) == 1  # Produto foi pesquisado apenas uma vez
+
+    # Verificar o formato dos logs criados
+    view_log = response_data['views'][0]
+    assert 'viewed_at' in view_log
+    assert isinstance(view_log['viewed_at'], str)  # O timestamp deve ser uma string
+
+    # Tenta converter o 'viewed_at' para datetime e verifica se é válido
+    from datetime import datetime
+    try:
+        datetime.strptime(view_log['viewed_at'], "%Y-%m-%dT%H:%M:%S.%f")
+    except ValueError as e:
+        print(e)
+        assert False
+
+
+def test_get_product_view_logs_of_a_nonexistent_product(setup_database):
+    """Ensuring NotFound exception when trying to get views logs a non-existing product."""
+    response = client.get(f'/products/999/views')
+    assert response.status_code == 404
+    assert response.json()['message'] == 'Product not found.'
 
 
 def test_update_product(setup_database):
