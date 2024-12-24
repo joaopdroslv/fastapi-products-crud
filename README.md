@@ -18,7 +18,7 @@ Uma collection POSTMAN foi criada para documentar os endpoints do projeto. Dispo
 
 [POSTMAN Documentation](https://documenter.getpostman.com/view/40636918/2sAYJ4igQE)
 
-## Como Rodar o Projeto
+# Como Rodar o Projeto
 
 ### Passo 1: Clone o repositório
 
@@ -69,7 +69,7 @@ docker-compose up --build
 
 Esse comando irá construir as imagens e iniciar os containers do projeto (incluindo a aplicação FastAPI e o MongoDB).
 
-## Como Rodar os Testes
+# Como Rodar os Testes
 
 No contexto deste projeto, os testes dependem do container mongodb em execução para serem executados corretamente.
 
