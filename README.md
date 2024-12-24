@@ -1,14 +1,23 @@
 # FastAPI Products CRUD
 
-Este `FastAPI Products CRUD` é um projeto FastAPI responsável por gerenciar as operações CRUD relacionadas a produtos. Ele integra com um banco de dados SQL (usando SQLAlchemy) para o gerenciamento de produtos e um cliente MongoDB para registrar as visualizações dos produtos.
+Este projeto utiliza o FastAPI para implementar operações CRUD para gerenciamento de produtos. Ele integra com um banco de dados SQL (SQLite com SQLAlchemy) para armazenar informações sobre os produtos e um cliente MongoDB para registrar as visualizações de cada produto.
 
-### Observações
+### Tecnologias utilizadas:
 
-O projeto foi desenvolvido levando em consideração as boas práticas definidas na documentação do FastAPI web framework. Disponível em:
+1. FastAPI: Framework para desenvolvimento de APIs rápidas e eficientes.
+2. SQLAlchemy: ORM para interação com o banco de dados relacional (SQLite).
+3. Pydantic: Validação de dados e definição de modelos.
+4. SQLite: Banco de dados relacional para persistência dos produtos.
+5. MongoDB: Banco NoSQL para registrar logs de visualizações de produtos.
+6. pytest: Framework para testes automatizados.
+
+### Observações:
+
+1. O projeto foi desenvolvido levando em consideração as boas práticas definidas na documentação do FastAPI web framework. Disponível em:
 
 [FastAPI Documentation](https://fastapi.tiangolo.com)
 
-E também as boas práticas disponíveis no repositório `fastapi-best-practices`. Disponível em:
+2. E também as boas práticas disponíveis no repositório `fastapi-best-practices`. Disponível em:
 
 [fastapi-best-practices GitHub Repository](https://github.com/zhanymkanov/fastapi-best-practices)
 
