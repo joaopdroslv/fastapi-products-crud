@@ -25,9 +25,9 @@ pip install -r requirements.txt
 
 ### Passo 3: Configuração das variáveis de ambiente
 
-Verifique se as variáveis de ambiente estão corretamente preenchidas no arquivo `.env`.
+Crie um arquivo `.env` usando como base o arquivo `.env.example` disponível no repositório.
 
-Se preferir, pode manter o `.env` disponível no repositório, já que ele está pré configurado com os seguintes campos:
+Verifique se todas as variáveis de ambiente estão corretamente preenchidas no arquivo `.env` criado por você ou se preferir, mantenha o `.env.example` disponível no repositório, basta renomea-lo para `.env`, já que ele está pré configurado com os seguintes campos:
 
 ```
 APP_PORT=
