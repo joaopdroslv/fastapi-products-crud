@@ -4,12 +4,12 @@ Este projeto utiliza o FastAPI para implementar operações CRUD para gerenciame
 
 ### Tecnologias utilizadas:
 
-1. FastAPI: Framework para desenvolvimento de APIs rápidas e eficientes.
-2. SQLAlchemy: ORM para interação com o banco de dados relacional (SQLite).
-3. Pydantic: Validação de dados e definição de modelos.
-4. SQLite: Banco de dados relacional para persistência dos produtos.
-5. MongoDB: Banco NoSQL para registrar logs de visualizações de produtos.
-6. pytest: Framework para testes automatizados.
+1. `FastAPI`: Framework para desenvolvimento de APIs rápidas e eficientes.
+2. `SQLAlchemy`: ORM para interação com o banco de dados relacional (SQLite).
+3. `Pydantic`: Validação de dados e definição de modelos.
+4. `SQLite`: Banco de dados relacional para persistência dos produtos.
+5. `MongoDB`: Banco NoSQL para registrar logs de visualizações de produtos.
+6. `pytest`: Framework para testes automatizados.
 
 ### Observações:
 
