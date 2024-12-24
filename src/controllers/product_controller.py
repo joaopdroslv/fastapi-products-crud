@@ -3,9 +3,8 @@ from src.crud import product_crud
 from src.database import dependencies
 from src.database import mongo_db
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-
 
 
 class ProductController:
@@ -14,23 +13,17 @@ class ProductController:
         self.product_log_client = mongo_db.ProductLogClient()  # MongoClient para gerar log de visualização
 
         self.router.add_api_route(
-            '/', self.create_product, methods=['POST'], response_model=product_schema.ProductCreate, status_code=201
+            '/', self.create_product, methods=['POST'], response_model=product_schema.Product, status_code=201
         )
-        self.router.add_api_route(
-            '/', self.get_products, methods=['GET'], status_code=200
-        )
-        self.router.add_api_route(
-            '/{product_id}', self.get_product, methods=['GET'], status_code=200
-        )
+        self.router.add_api_route('/', self.get_products, methods=['GET'], status_code=200)
+        self.router.add_api_route('/{product_id}', self.get_product, methods=['GET'], status_code=200)
         self.router.add_api_route(
             '/{product_id}', self.update_product, methods=['PUT'], response_model=product_schema.ProductUpdate, status_code=200
         )
         self.router.add_api_route(
             '/{product_id}', self.delete_product, methods=['DELETE'], response_model=product_schema.ProductBase, status_code=200
         )
-        self.router.add_api_route(
-            '/{product_id}/views', self.get_product_view_report, methods=['GET'], status_code=200
-        )
+        self.router.add_api_route('/{product_id}/views', self.get_product_view_report, methods=['GET'], status_code=200)
 
     def create_product(self, product: product_schema.ProductCreate, db: Session = Depends(dependencies.get_db)):
         db_product = product_crud.create_product(db=db, product=product)
@@ -41,38 +34,23 @@ class ProductController:
         return db_products
 
     def get_product(self, product_id: int, db: Session = Depends(dependencies.get_db)):
-        db_product = product_crud.get_product(db, product_id)
-        if db_product is None:
-            raise HTTPException(status_code=404, detail='Product not found')
-
-        # Log no MongoDB de cada visualização
-        self.product_log_client.log_product_view(product_id)
-
+        db_product = product_crud.find_product_by_id(product_id, db)
+        self.product_log_client.log_product_view(product_id)  # Log no MongoDB de cada visualização
         return db_product
 
     def update_product(self, product_id: int, product: product_schema.ProductUpdate, db: Session = Depends(dependencies.get_db)):
-        db_product = product_crud.get_product(db, product_id)
-        if db_product is None:
-            raise HTTPException(status_code=404, detail='Product not found')
-
+        product_crud.find_product_by_id(product_id, db)  # Validar se o produto existe na database
         updated_product = product_crud.update_product(db=db, product_id=product_id, product=product)
         return updated_product
 
     def delete_product(self, product_id: int, db: Session = Depends(dependencies.get_db)):
-        db_product = product_crud.get_product(db, product_id)
-        if db_product is None:
-            raise HTTPException(status_code=404, detail='Product not found')
-
+        product_crud.find_product_by_id(product_id, db)  # Validar se o produto existe na database
         deleted_product = product_crud.delete_product(db=db, product_id=product_id)
         return deleted_product
 
     def get_product_view_report(self, product_id: int, db: Session = Depends(dependencies.get_db)):
-        db_product = product_crud.get_product(db, product_id)
-        if db_product is None:
-            raise HTTPException(status_code=404, detail='Product not found')
-
-        # Obtemos os logs de visualização do MongoDB
-        product_views = self.product_log_client.get_product_view_logs(product_id)
+        db_product = product_crud.find_product_by_id(product_id, db)
+        product_views = self.product_log_client.get_product_view_logs(product_id)  # Obtemos os logs de visualização do MongoDB
 
         # Retornamos o produto e os logs de visualização
         return {'product': db_product, 'number_of_views': len(product_views), 'views': product_views}

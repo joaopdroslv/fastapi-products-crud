@@ -3,3 +3,7 @@ __pycache__
 .env
 
 db
+
+test_database.db
+
+notes.txt

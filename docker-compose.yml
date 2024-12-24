@@ -1,16 +1,16 @@
 services:
-  fastapi:
+  app:
     build: .
-    container_name: fastapi-products-app
+    container_name: fastapi-crud-products
     ports:
-      - "8000:8000"
+      - "${APP_PORT}:${APP_PORT}"
     depends_on:
       - mongodb
     environment:
       - MONGO_URL=${MONGODB_URL}
     volumes:
       - .:/src
-      - ./db:/db
+      - ./db:/db # Volume para o SQLite
     networks:
       - app-network
 
@@ -18,10 +18,15 @@ services:
     image: mongo:latest
     container_name: mongodb
     ports:
-      - "27017:27017"
+      - "${MONGODB_PORT}:${MONGODB_PORT}"
+    volumes:
+      - mongodb-data:/data/db # Volume para o MongoDB
     networks:
       - app-network
 
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  mongodb-data: # Volume separado para o MongoDB

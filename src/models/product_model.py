@@ -1,5 +1,5 @@
 from src.database.sqlite import Base
-from src.enums import product_enum
+from src.schemas import product_schema
 
 from sqlalchemy import Column, String, Numeric, Integer, Enum
 
@@ -11,5 +11,5 @@ class Product(Base):
     name = Column(String(128), nullable=False)
     description = Column(String(255), nullable=False)
     price = Column(Numeric, nullable=False)
-    status = Column(Enum(product_enum.ProductStatus))
+    status = Column(Enum(product_schema.ProductStatus))
     stock_quantity = Column(Integer, nullable=False)
