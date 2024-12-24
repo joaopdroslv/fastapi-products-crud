@@ -71,7 +71,7 @@ Esse comando irá construir as imagens e iniciar os containers do projeto (inclu
 
 ## Como Rodar os Testes
 
-No contexto deste projeto, os testes dependendo do container mongodb em execução para serem executados corretamente.
+No contexto deste projeto, os testes dependem do container mongodb em execução para serem executados corretamente.
 
 ### Passo 1: Iniciar o MongoDB separadamente
 
