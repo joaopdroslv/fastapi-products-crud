@@ -1,6 +1,6 @@
-# Product Controller
+# FastAPI CRUD Prodcuts
 
-Este `ProductController` é um controlador FastAPI responsável por gerenciar as operações CRUD relacionadas aos produtos. Ele integra com um banco de dados SQL (usando SQLAlchemy) para o gerenciamento de produtos e um cliente MongoDB para registrar as visualizações dos produtos.
+Este `FastAPI CRUD Products` é um projeto FastAPI responsável por gerenciar as operações CRUD relacionadas a produtos. Ele integra com um banco de dados SQL (usando SQLAlchemy) para o gerenciamento de produtos e um cliente MongoDB para registrar as visualizações dos produtos.
 
 ## Como Rodar o Projeto
 
