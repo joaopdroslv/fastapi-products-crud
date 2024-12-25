@@ -62,7 +62,7 @@ class ProductController:
         return db_product
 
     def get_product_view_report(
-            self, product_id: int, db: Session = Depends(dependencies.get_db)) -> dict:
+            self, product_id: int, db: Session = Depends(dependencies.get_db)):
         db_product = product_crud.find_product_by_id(product_id, db)
         # Obtemos os logs de visualização do MongoDB
         product_views = self.product_log_client.get_product_view_logs(product_id)  
