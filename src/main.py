@@ -1,6 +1,6 @@
 from src.controllers import product_controller
-from src import exceptions
 from src import exception_handlers
+from src import exceptions
 
 
 from fastapi import FastAPI
@@ -14,9 +14,6 @@ app.add_exception_handler(
 )
 app.add_exception_handler(
     RequestValidationError, exception_handlers.validation_exception_handler
-)
-app.add_exception_handler(
-    Exception, exception_handlers.generic_exception_handler
 )
 
 app.include_router(product_controller.product_controller.router)

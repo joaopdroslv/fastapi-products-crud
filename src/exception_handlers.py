@@ -28,12 +28,3 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
             'details': error_details
         },
     )
-
-
-async def generic_exception_handler(request: Request, exc: Exception):
-    # OBSERVAÇÃO: Neste ponto, é interessante criar um log para a exceção...
-    # IMPORTANTE: Por questão de segurança, retornar mensagem genérica ao usuário.
-    return JSONResponse(
-        status_code=500,
-        content={'message': 'Ops! Somethind went wrong, we fell sorry for this.'}
-    )
