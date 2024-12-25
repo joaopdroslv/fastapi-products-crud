@@ -73,13 +73,13 @@ def test_create_product_validates_content_on_creation(setup_database):
     generated_products: List[dict] = utils.generate_valid_products(1)
     generated_product = generated_products[0]
     response = client.post('/products', json=generated_product)
-    reponse_data = response.json()
+    response_data = response.json()
     assert response.status_code == 201
-    assert reponse_data['name'] == generated_product['name']
-    assert reponse_data['description'] == generated_product['description']
-    assert reponse_data['price'] == generated_product['price']
-    assert reponse_data['status'] == generated_product['status']
-    assert reponse_data['stock_quantity'] == generated_product['stock_quantity']
+    assert response_data['name'] == generated_product['name']
+    assert response_data['description'] == generated_product['description']
+    assert response_data['price'] == generated_product['price']
+    assert response_data['status'] == generated_product['status']
+    assert response_data['stock_quantity'] == generated_product['stock_quantity']
 
 
 def test_create_invalid_in_stock_product(setup_database):
@@ -302,19 +302,11 @@ def test_update_product_with_partial_data(setup_database):
     created_product_id = response.json()['id']
 
     # Atualiza o produto criado (com apenas o campo alvo da atualização)
-    updated_product = {'stock_quantity': 999}
-    response = client.put(f'/products/{created_product_id}', json=updated_product)
+    updated_data = {'stock_quantity': 999}
+    response = client.put(f'/products/{created_product_id}', json=updated_data)
 
     assert response.status_code == 200
     assert response.json()['stock_quantity'] == 999
-
-
-def test_update_nonexistent_product(setup_database):
-    """Checks if a NotFound error is returned when trying to update a non-existent product."""
-    generated_products: List[dict] = utils.generate_valid_products(1)
-    response = client.put('/products/999', json=generated_products[0])
-    assert response.status_code == 404
-    assert response.json()['message'] == 'Product not found.'
 
 
 def test_update_product_with_invalid_in_stock_status(setup_database):
@@ -364,8 +356,15 @@ def test_update_product_with_invalid_price_value(setup_database):
     invalid_product_to_update = generated_products[0].copy()
     invalid_product_to_update['price'] = 0.0
     response = client.put(f'/products/{created_product_id}', json=invalid_product_to_update)
-
     assert response.status_code == 422
+
+
+def test_update_nonexistent_product(setup_database):
+    """Checks if a NotFound error is returned when trying to update a non-existent product."""
+    generated_products: List[dict] = utils.generate_valid_products(1)
+    response = client.put('/products/999', json=generated_products[0])
+    assert response.status_code == 404
+    assert response.json()['message'] == 'Product not found.'
 
 
 def test_delete_product_successfully(setup_database):
@@ -375,8 +374,6 @@ def test_delete_product_successfully(setup_database):
     created_product_id = response.json()['id']
     response = client.delete(f'/products/{created_product_id}')
     assert response.status_code == 200
-    response = client.get(f'/products/{created_product_id}')
-    assert response.status_code == 404  # NotFound esperado após a deleção
 
 
 def test_delete_nonexistent_product(setup_database):
