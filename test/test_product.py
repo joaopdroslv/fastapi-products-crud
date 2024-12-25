@@ -42,10 +42,10 @@ MONGODB_TEST_DATABASE_NAME=os.getenv('MONGODB_TEST_DATABASE_NAME')
 def setup_database():
     # Substitui o ProductLogClient usado pelo controlador de produtos
     product_controller.product_log_client = mongodb.ProductLogClient('test')
-
-    # Limpeza do banco de dados do MongoDB antes de cada teste
     # Captura o mongo client do product log client
     mongo_client = product_controller.product_log_client.mongo_client  
+
+    # Limpeza do banco de dados do MongoDB antes de cada teste
     mongo_client.drop_database(MONGODB_TEST_DATABASE_NAME)
 
     # Criação e limpeza das tabelas antes de cada teste
