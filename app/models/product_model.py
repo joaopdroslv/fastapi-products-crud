@@ -1,5 +1,5 @@
-from src.database.sqlite import Base
-from src.schemas import product_schema
+from app.database.sqlite import Base
+from app.schemas import product_schema
 
 from sqlalchemy import Column, String, Numeric, Integer, Enum
 

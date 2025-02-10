@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Defina o diretório de trabalho dentro do container
-WORKDIR /src
+WORKDIR /app
 
 # Copie o arquivo de dependências para o container
 COPY requirements.txt . 
@@ -25,4 +25,4 @@ RUN mkdir -p /db && touch /db/database.db
 EXPOSE 8000
 
 # Comando para rodar o servidor FastAPI usando Uvicorn
-CMD ["sh", "-c", "alembic upgrade head && uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"]
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"]

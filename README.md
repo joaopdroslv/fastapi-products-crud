@@ -1,58 +1,58 @@
 # FastAPI Products CRUD
 
-Este projeto utiliza o FastAPI para implementar operações CRUD para gerenciamento de produtos. Ele integra com um banco de dados SQL (SQLite com SQLAlchemy) para armazenar informações sobre os produtos e um cliente MongoDB para registrar as visualizações de cada produto.
+This project uses FastAPI to implement CRUD operations for product management. It integrates with an SQL database (SQLite with SQLAlchemy) to store product information and a MongoDB client to log product views.
 
-### Tecnologias utilizadas:
+## Technologies Used
 
-1. `FastAPI`: Framework para desenvolvimento de APIs rápidas e eficientes.
-2. `SQLAlchemy`: ORM para interação com o banco de dados relacional (SQLite).
-3. `Pydantic`: Validação de dados e definição de modelos.
-4. `SQLite`: Banco de dados relacional para persistência dos produtos.
-5. `MongoDB`: Banco NoSQL para registrar logs de visualizações de produtos.
-6. `pytest`: Framework para testes automatizados.
+1. `FastAPI`: Framework for building fast and efficient APIs.
+2. `SQLAlchemy`: ORM for interacting with the relational database (SQLite).
+3. `Pydantic`: Data validation and model definition.
+4. `SQLite`: Relational database for product persistence.
+5. `MongoDB`: NoSQL database for logging product view events.
+6. `pytest`: Framework for automated testing.
 
-### Observações:
+## Notes
 
-1. O projeto foi desenvolvido levando em consideração as boas práticas definidas na documentação do FastAPI web framework. Disponível em:
+1. The project follows best practices defined in the FastAPI web framework documentation. Available at:
 
 [FastAPI Documentation](https://fastapi.tiangolo.com)
 
-2. E também as boas práticas disponíveis no repositório `fastapi-best-practices`. Disponível em:
+2. It also follows best practices available in the `fastapi-best-practices` repository. Available at:
 
 [fastapi-best-practices GitHub Repository](https://github.com/zhanymkanov/fastapi-best-practices)
 
-# Documentação POSTMAN
+## POSTMAN Documentation
 
-Uma collection POSTMAN foi criada para documentar os endpoints do projeto. Disponível em:
+A POSTMAN collection has been created to document the project's endpoints. Available at:
 
 [POSTMAN Documentation](https://documenter.getpostman.com/view/40636918/2sAYJ4igQE)
 
-# Como Rodar o Projeto
+## How to Run the Project
 
-### Passo 1: Clone o repositório
+### Step 1: Clone the repository
 
-Clone o repositório para sua máquina local:
+Clone the repository to your local machine:
 
 ```bash
 git clone https://github.com/joaopdroslv/fastapi-products-crud
 cd fastapi-products-crud
 ```
 
-### Passo 2: Instalar as dependências
+### Step 2: Install dependencies
 
-RECOMENDAÇÃO: Crie um ambiente virtual para isso.
+**RECOMMENDATION**: Create a virtual environment first.
 
-Antes de rodar o projeto, instale as dependências necessárias. No diretório raiz do projeto, execute:
+Before running the project, install the necessary dependencies. In the project's root directory, run:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Passo 3: Configuração das variáveis de ambiente
+### Step 3: Configure environment variables
 
-Crie um arquivo `.env` usando como base o arquivo `.env.example` disponível no repositório.
+Create a `.env` file using the `.env.example` file available in the repository as a template.
 
-Verifique se todas as variáveis de ambiente estão corretamente preenchidas no arquivo `.env` criado por você ou se preferir, mantenha o `.env.example` disponível no repositório, basta renomea-lo para `.env`, já que ele está pré configurado com os seguintes campos:
+Ensure all environment variables are correctly set in the `.env` file, or, if preferred, rename `.env.example` to `.env`, as it is pre-configured with the following fields:
 
 ```
 APP_PORT=
@@ -66,38 +66,38 @@ MONGODB_TEST_DATABASE_NAME=
 MONGODB_TEST_URL=
 ```
 
-Preencha de acordo com seu ambiente se desejar
+Fill in the details according to your environment if necessary.
 
-### Passo 4: Construa e inicie os containers docker
+### Step 4: Build and start the Docker containers
 
-Depois de configurar as variáveis de ambiente, use o Docker Compose para construir e iniciar os containers:
+After configuring the environment variables, use Docker Compose to build and start the containers:
 
 ```bash
 docker-compose up --build
 ```
 
-Esse comando irá construir as imagens e iniciar os containers do projeto (incluindo a aplicação FastAPI e o MongoDB).
+This command will build the images and start the project's containers (including the FastAPI application and MongoDB).
 
-# Como Rodar os Testes
+## How to Run Tests
 
-No contexto deste projeto, os testes dependem do container mongodb em execução para serem executados corretamente.
+In this project, tests require the MongoDB container to be running for proper execution.
 
-### Passo 1: Iniciar o MongoDB separadamente
+### Step 1: Start MongoDB separately
 
-Para rodar os testes, é necessário ter o MongoDB em execução. Você pode iniciar o MongoDB separadamente com o seguinte comando:
+To run the tests, MongoDB must be running. You can start it separately with the following command:
 
 ```bash
 docker-compose up mongodb --build
 ```
 
-Isso irá iniciar o container do MongoDB.
+This will start the MongoDB container.
 
-### Passo 2: Rodar os testes
+### Step 2: Run the tests
 
-Após iniciar o MongoDB, você pode rodar os testes utilizando o pytest:
+After starting MongoDB, you can run the tests using pytest:
 
 ```bash
-pytest -vv
+pytest -vvv
 ```
 
-Esse comando irá executar todos os testes do projeto, mostrando detalhes sobre a execução.
+This command will execute all tests in the project, displaying detailed information about the execution.

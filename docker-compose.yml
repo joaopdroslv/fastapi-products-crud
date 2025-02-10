@@ -9,14 +9,14 @@ services:
     environment:
       - MONGO_URL=${MONGODB_PRODUCTION_URL}
     volumes:
-      - .:/src
+      - .:/app
       - ./db:/db # Volume para o SQLite
     networks:
       - app-network
 
   mongodb:
     image: mongo:latest
-    container_name: mongodb
+    container_name: fastapi-crud-products-mongodb
     ports:
       - "${MONGODB_PORT}:${MONGODB_PORT}"
     volumes:

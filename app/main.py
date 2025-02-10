@@ -1,6 +1,6 @@
-from src.controllers import product_controller
-from src import exception_handlers
-from src import exceptions
+from app.controllers import product_controller
+from app import exception_handlers
+from app import exceptions
 
 
 from fastapi import FastAPI

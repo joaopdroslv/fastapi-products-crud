@@ -1,6 +1,6 @@
-from src.models import product_model
-from src.schemas import product_schema
-from src import exceptions
+from app.models import product_model
+from app.schemas import product_schema
+from app import exceptions
 
 from sqlalchemy.orm import Session
 

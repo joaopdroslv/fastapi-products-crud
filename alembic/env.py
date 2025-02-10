@@ -26,8 +26,8 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from src.models.product_model import Product
-from src.database.sqlite import Base
+from app.models.product_model import Product
+from app.database.sqlite import Base
 target_metadata = Base.metadata
 
 

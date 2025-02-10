@@ -1,7 +1,7 @@
-from src.schemas import product_schema
-from src.crud import product_crud
-from src.database import dependencies
-from src.database import mongodb
+from app.schemas import product_schema
+from app.crud import product_crud
+from app.database import dependencies
+from app.database import mongodb
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session

@@ -1,9 +1,9 @@
-from src.main import app
-from src.schemas.product_schema import ProductStatus
-from src.controllers.product_controller import product_controller
-from src.database import dependencies
-from src.database import sqlite
-from src.database import mongodb
+from app.main import app
+from app.schemas.product_schema import ProductStatus
+from app.controllers.product_controller import product_controller
+from app.database import dependencies
+from app.database import sqlite
+from app.database import mongodb
 from test import utils
 
 import pytest
