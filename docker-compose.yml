@@ -1,11 +1,11 @@
 services:
   app:
     build: .
-    container_name: fastapi-crud-products
+    container_name: fastapi-products-crud
     ports:
       - "${APP_PORT}:${APP_PORT}"
     depends_on:
-      - mongodb
+      - fastapi-products-crud-mongodb
     environment:
       - MONGO_URL=${MONGODB_PRODUCTION_URL}
     volumes:
@@ -14,9 +14,9 @@ services:
     networks:
       - app-network
 
-  mongodb:
+  fastapi-products-crud-mongodb:
     image: mongo:latest
-    container_name: fastapi-crud-products-mongodb
+    container_name: fastapi-products-crud-mongodb
     ports:
       - "${MONGODB_PORT}:${MONGODB_PORT}"
     volumes:
