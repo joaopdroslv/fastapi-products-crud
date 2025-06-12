@@ -1,11 +1,11 @@
+from sqlalchemy import Column, Enum, Integer, Numeric, String
+
 from app.database.sqlite import Base
 from app.schemas import product_schema
 
-from sqlalchemy import Column, String, Numeric, Integer, Enum
-
 
 class Product(Base):
-    __tablename__ = 'products'
+    __tablename__ = "products"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(128), nullable=False)

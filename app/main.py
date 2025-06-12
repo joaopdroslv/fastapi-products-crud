@@ -1,11 +1,8 @@
-from app.controllers import product_controller
-from app import exception_handlers
-from app import exceptions
-
-
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 
+from app import exception_handlers, exceptions
+from app.controllers import product_controller
 
 app = FastAPI()
 

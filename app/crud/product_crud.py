@@ -1,8 +1,8 @@
+from sqlalchemy.orm import Session
+
+from app import exceptions
 from app.models import product_model
 from app.schemas import product_schema
-from app import exceptions
-
-from sqlalchemy.orm import Session
 
 
 def create_product(db: Session, product: product_schema.ProductCreate):
@@ -34,7 +34,11 @@ def delete_product(product_id: int, db: Session):
 
 
 def find_product_by_id(product_id: int, db: Session):
-    db_product = db.query(product_model.Product).filter(product_model.Product.id == product_id).first()
+    db_product = (
+        db.query(product_model.Product)
+        .filter(product_model.Product.id == product_id)
+        .first()
+    )
     if not db_product:
-        raise exceptions.NotFound('Product')
+        raise exceptions.NotFound("Product")
     return db_product
